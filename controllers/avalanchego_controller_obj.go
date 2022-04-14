@@ -264,7 +264,7 @@ func (r *CaminogoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Camin
 	initContainers := []corev1.Container{
 		{
 			Name:  "init-bootnode-ip",
-			Image: "avaplatform/dnsutils:1.0.0",
+			Image: "caminoplatform/dnsutils:1.0.0",
 			Env: []corev1.EnvVar{
 				{
 					Name:  "CONFIG_PATH",

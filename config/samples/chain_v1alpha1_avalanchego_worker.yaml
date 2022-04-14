@@ -6,7 +6,7 @@ spec:
   deploymentName: test-worker
   bootstrapperURL: avago-test-validator-0-service
   nodeCount: 2
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.0
   env:
   - name: AVAGO_LOG_LEVEL

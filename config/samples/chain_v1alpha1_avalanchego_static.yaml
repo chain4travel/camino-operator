@@ -6,7 +6,7 @@ metadata:
 spec:
   deploymentName: test-static-first
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -29,7 +29,7 @@ metadata:
 spec:
   deploymentName: test-static-second
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -53,7 +53,7 @@ metadata:
 spec:
   deploymentName: test-static-third
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -77,7 +77,7 @@ metadata:
 spec:
   deploymentName: test-static-fourth
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -101,7 +101,7 @@ metadata:
 spec:
   deploymentName: test-static-fifth
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL

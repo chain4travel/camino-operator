@@ -6,7 +6,7 @@ spec:
   # Add fields here
   deploymentName: test-validator
   nodeCount: 5
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.7.3
   env:
   - name: AVAGO_LOG_LEVEL

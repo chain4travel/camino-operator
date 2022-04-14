@@ -57,7 +57,7 @@ type CaminogoSpec struct {
 
 	// Docker image name. Will be used in chain deployments
 	// +optional
-	// +kubebuilder:default:="avaplatform/caminogo"
+	// +kubebuilder:default:="caminoplatform/caminogo"
 	Image string `json:"image,omitempty"`
 
 	// Docker image tag. Will be used in chain deployments

@@ -15,7 +15,7 @@ spec:
   # Add fields here
   deploymentName: test-validator
   nodeCount: 5
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.0
   imagePullSecrets:
   - name: regcred
@@ -86,7 +86,7 @@ spec:
   deploymentName: test-worker
   bootstrapperURL: avago-test-validator-0-service
   nodeCount: 1
-  image: avaplatform/caminogo
+  image: caminoplatform/caminogo
   tag: v1.6.0
   env:
   - name: AVAGO_LOG_LEVEL
