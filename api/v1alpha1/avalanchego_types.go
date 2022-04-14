@@ -24,8 +24,8 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// AvalanchegoSpec defines the desired state of Avalanchego
-type AvalanchegoSpec struct {
+// CaminogoSpec defines the desired state of Caminogo
+type CaminogoSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
@@ -69,7 +69,7 @@ type AvalanchegoSpec struct {
 	// +optional
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
-	// Resources (requests and limits of CPU and RAM) for the Avalanchego instances
+	// Resources (requests and limits of CPU and RAM) for the Caminogo instances
 	// +optional
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
 
@@ -91,8 +91,8 @@ type Certificate struct {
 	Key  string `json:"key"`
 }
 
-// AvalanchegoStatus defines the observed state of Avalanchego
-type AvalanchegoStatus struct {
+// CaminogoStatus defines the observed state of Caminogo
+type CaminogoStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
@@ -112,24 +112,24 @@ type AvalanchegoStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Avalanchego is the Schema for the avalanchegoes API
-type Avalanchego struct {
+// Caminogo is the Schema for the avalanchegoes API
+type Caminogo struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   AvalanchegoSpec   `json:"spec,omitempty"`
-	Status AvalanchegoStatus `json:"status,omitempty"`
+	Spec   CaminogoSpec   `json:"spec,omitempty"`
+	Status CaminogoStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// AvalanchegoList contains a list of Avalanchego
-type AvalanchegoList struct {
+// CaminogoList contains a list of Caminogo
+type CaminogoList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Avalanchego `json:"items"`
+	Items           []Caminogo `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Avalanchego{}, &AvalanchegoList{})
+	SchemeBuilder.Register(&Caminogo{}, &CaminogoList{})
 }

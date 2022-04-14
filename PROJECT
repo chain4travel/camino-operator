@@ -13,7 +13,7 @@ resources:
   controller: true
   domain: avax.network
   group: chain
-  kind: Avalanchego
+  kind: Caminogo
   path: github.com/chain4travel/caminogo-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

@@ -1,5 +1,5 @@
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-validator
 spec:

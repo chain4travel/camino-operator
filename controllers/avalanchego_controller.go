@@ -33,8 +33,8 @@ import (
 	"github.com/chain4travel/caminogo-operator/controllers/common"
 )
 
-// AvalanchegoReconciler reconciles a Avalanchego object
-type AvalanchegoReconciler struct {
+// CaminogoReconciler reconciles a Caminogo object
+type CaminogoReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
@@ -55,17 +55,17 @@ const (
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// the Avalanchego object against the actual cluster state, and then
+// the Caminogo object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.9.2/pkg/reconcile
-func (r *AvalanchegoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	l := log.FromContext(ctx)
 	l.Info("Started")
-	// Fetch the Avalanchego instance
-	instance := &chainv1alpha1.Avalanchego{}
+	// Fetch the Caminogo instance
+	instance := &chainv1alpha1.Caminogo{}
 	err := r.Get(ctx, req.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -307,9 +307,9 @@ func (r *AvalanchegoReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *AvalanchegoReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *CaminogoReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&chainv1alpha1.Avalanchego{}).
+		For(&chainv1alpha1.Caminogo{}).
 		Complete(r)
 }
 
@@ -322,6 +322,6 @@ func notContainsS(s []string, str string) bool {
 	return true
 }
 
-func getSecretBaseName(instance chainv1alpha1.Avalanchego, nodeId int) string {
+func getSecretBaseName(instance chainv1alpha1.Caminogo, nodeId int) string {
 	return instance.Spec.DeploymentName + "-" + strconv.Itoa(nodeId)
 }

@@ -1,6 +1,6 @@
 ---
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-first
 spec:
@@ -23,7 +23,7 @@ spec:
 
 ---
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-second
 spec:
@@ -47,7 +47,7 @@ spec:
 
 ---
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-third
 spec:
@@ -71,7 +71,7 @@ spec:
 
 ---
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-fourth
 spec:
@@ -95,7 +95,7 @@ spec:
 
 ---
 apiVersion: chain.avax.network/v1alpha1
-kind: Avalanchego
+kind: Caminogo
 metadata:
   name: avalanchego-test-fifth
 spec:

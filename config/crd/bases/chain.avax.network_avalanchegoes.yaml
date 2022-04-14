@@ -10,8 +10,8 @@ metadata:
 spec:
   group: chain.avax.network
   names:
-    kind: Avalanchego
-    listKind: AvalanchegoList
+    kind: Caminogo
+    listKind: CaminogoList
     plural: avalanchegoes
     singular: avalanchego
   scope: Namespaced
@@ -19,7 +19,7 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Avalanchego is the Schema for the avalanchegoes API
+        description: Caminogo is the Schema for the avalanchegoes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -34,7 +34,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: AvalanchegoSpec defines the desired state of Avalanchego
+            description: CaminogoSpec defines the desired state of Caminogo
             properties:
               bootstrapperURL:
                 description: If specified, nodes will be attached to existing network
@@ -203,7 +203,7 @@ spec:
                 type: object
               resources:
                 description: Resources (requests and limits of CPU and RAM) for the
-                  Avalanchego instances
+                  Caminogo instances
                 properties:
                   limits:
                     additionalProperties:
@@ -234,7 +234,7 @@ spec:
                 type: string
             type: object
           status:
-            description: AvalanchegoStatus defines the observed state of Avalanchego
+            description: CaminogoStatus defines the observed state of Caminogo
             properties:
               bootstrapperURL:
                 description: Service URL of the Bootstrapper node

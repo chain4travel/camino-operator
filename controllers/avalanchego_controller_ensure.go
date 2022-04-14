@@ -50,10 +50,10 @@ var (
 	isTestRun              bool = false
 )
 
-func (r *AvalanchegoReconciler) ensureConfigMap(
+func (r *CaminogoReconciler) ensureConfigMap(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Avalanchego,
+	instance *chainv1alpha1.Caminogo,
 	s *corev1.ConfigMap,
 	l logr.Logger,
 ) error {
@@ -61,10 +61,10 @@ func (r *AvalanchegoReconciler) ensureConfigMap(
 	return err
 }
 
-func (r *AvalanchegoReconciler) ensureSecret(
+func (r *CaminogoReconciler) ensureSecret(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Avalanchego,
+	instance *chainv1alpha1.Caminogo,
 	s *corev1.Secret,
 	l logr.Logger,
 ) error {
@@ -78,7 +78,7 @@ func (r *AvalanchegoReconciler) ensureSecret(
 	return err
 }
 
-func (r *AvalanchegoReconciler) ensureService(
+func (r *CaminogoReconciler) ensureService(
 	ctx context.Context,
 	req ctrl.Request,
 	s *corev1.Service,
@@ -89,7 +89,7 @@ func (r *AvalanchegoReconciler) ensureService(
 	return err
 }
 
-func (r *AvalanchegoReconciler) ensurePVC(
+func (r *CaminogoReconciler) ensurePVC(
 	ctx context.Context,
 	req ctrl.Request,
 	s *corev1.PersistentVolumeClaim,
@@ -117,10 +117,10 @@ func (r *AvalanchegoReconciler) ensurePVC(
 	return err
 }
 
-func (r *AvalanchegoReconciler) ensureStatefulSet(
+func (r *CaminogoReconciler) ensureStatefulSet(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Avalanchego,
+	instance *chainv1alpha1.Caminogo,
 	s *appsv1.StatefulSet,
 	l logr.Logger,
 	async asyncCreateStatefulSet,
@@ -137,10 +137,10 @@ func (r *AvalanchegoReconciler) ensureStatefulSet(
 func waitForStatefulset(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Avalanchego,
+	instance *chainv1alpha1.Caminogo,
 	s *appsv1.StatefulSet,
 	l logr.Logger,
-	r *AvalanchegoReconciler,
+	r *CaminogoReconciler,
 	async asyncCreateStatefulSet) error {
 
 	// creates the clientset
@@ -235,7 +235,7 @@ func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
 // isUpdateable must be true to allow update (some objects like PVC are immutable)
 func upsertObject(
 	ctx context.Context,
-	r *AvalanchegoReconciler,
+	r *CaminogoReconciler,
 	targetObj client.Object,
 	isUpdateable bool,
 	l logr.Logger) (existed bool, err error) {

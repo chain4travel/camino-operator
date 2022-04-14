@@ -78,11 +78,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := (&controllers.AvalanchegoReconciler{
+	if err := (&controllers.CaminogoReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Avalanchego")
+		setupLog.Error(err, "unable to create controller", "controller", "Caminogo")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

@@ -30,8 +30,8 @@ import (
 	avalanchegoConstants "github.com/chain4travel/caminogo/utils/constants"
 )
 
-func (r *AvalanchegoReconciler) avagoConfigMap(
-	instance *chainv1alpha1.Avalanchego,
+func (r *CaminogoReconciler) avagoConfigMap(
+	instance *chainv1alpha1.Caminogo,
 	name string,
 	script string,
 ) *corev1.ConfigMap {
@@ -55,8 +55,8 @@ func (r *AvalanchegoReconciler) avagoConfigMap(
 	return cm
 }
 
-func (r *AvalanchegoReconciler) avagoSecret(
-	instance *chainv1alpha1.Avalanchego,
+func (r *CaminogoReconciler) avagoSecret(
+	instance *chainv1alpha1.Caminogo,
 	name string,
 	certificate string,
 	key string,
@@ -85,8 +85,8 @@ func (r *AvalanchegoReconciler) avagoSecret(
 	return secr
 }
 
-func (r *AvalanchegoReconciler) avagoService(
-	instance *chainv1alpha1.Avalanchego,
+func (r *CaminogoReconciler) avagoService(
+	instance *chainv1alpha1.Caminogo,
 	name string,
 ) *corev1.Service {
 	svc := &corev1.Service{
@@ -124,8 +124,8 @@ func (r *AvalanchegoReconciler) avagoService(
 	return svc
 }
 
-func (r *AvalanchegoReconciler) avagoPVC(
-	instance *chainv1alpha1.Avalanchego,
+func (r *CaminogoReconciler) avagoPVC(
+	instance *chainv1alpha1.Caminogo,
 	name string,
 ) *corev1.PersistentVolumeClaim {
 	pvc := &corev1.PersistentVolumeClaim{
@@ -153,8 +153,8 @@ func (r *AvalanchegoReconciler) avagoPVC(
 	return pvc
 }
 
-func (r *AvalanchegoReconciler) avagoStatefulSet(
-	instance *chainv1alpha1.Avalanchego,
+func (r *CaminogoReconciler) avagoStatefulSet(
+	instance *chainv1alpha1.Caminogo,
 	name string,
 	nodeId int,
 ) *appsv1.StatefulSet {
@@ -260,7 +260,7 @@ func (r *AvalanchegoReconciler) avagoStatefulSet(
 	return sts
 }
 
-func (r *AvalanchegoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Avalanchego) []corev1.Container {
+func (r *CaminogoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Caminogo) []corev1.Container {
 	initContainers := []corev1.Container{
 		{
 			Name:  "init-bootnode-ip",
@@ -297,7 +297,7 @@ func (r *AvalanchegoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Av
 	return initContainers
 }
 
-func (r *AvalanchegoReconciler) getEnvVars(instance *chainv1alpha1.Avalanchego) []corev1.EnvVar {
+func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []corev1.EnvVar {
 	envVars := []corev1.EnvVar{
 		{
 			Name:  "AVAGO_HTTP_HOST",
@@ -383,7 +383,7 @@ func indexOf(env []corev1.EnvVar, name string) int {
 	return -1
 }
 
-func (r *AvalanchegoReconciler) getVolumeMounts(instance *chainv1alpha1.Avalanchego, name string) []corev1.VolumeMount {
+func (r *CaminogoReconciler) getVolumeMounts(instance *chainv1alpha1.Caminogo, name string) []corev1.VolumeMount {
 	return []corev1.VolumeMount{
 		{
 			Name:      avaGoPrefix + "db-" + name,
@@ -403,7 +403,7 @@ func (r *AvalanchegoReconciler) getVolumeMounts(instance *chainv1alpha1.Avalanch
 	}
 }
 
-func (r *AvalanchegoReconciler) getVolumes(instance *chainv1alpha1.Avalanchego, name string, nodeId int) []corev1.Volume {
+func (r *CaminogoReconciler) getVolumes(instance *chainv1alpha1.Caminogo, name string, nodeId int) []corev1.Volume {
 
 	var secretName string
 	if len(instance.Spec.ExistingSecrets) > 0 {
