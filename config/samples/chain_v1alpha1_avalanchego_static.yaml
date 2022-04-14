@@ -2,11 +2,11 @@
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-first
+  name: caminogo-test-first
 spec:
   deploymentName: test-static-first
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -25,11 +25,11 @@ spec:
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-second
+  name: caminogo-test-second
 spec:
   deploymentName: test-static-second
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -49,11 +49,11 @@ spec:
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-third
+  name: caminogo-test-third
 spec:
   deploymentName: test-static-third
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -73,11 +73,11 @@ spec:
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-fourth
+  name: caminogo-test-fourth
 spec:
   deploymentName: test-static-fourth
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL
@@ -97,11 +97,11 @@ spec:
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-fifth
+  name: caminogo-test-fifth
 spec:
   deploymentName: test-static-fifth
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.3
   env:
   - name: AVAGO_LOG_LEVEL

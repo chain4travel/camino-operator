@@ -10,12 +10,12 @@ Caminogo Operator extends kubernetes API with new kind of resources, `Caminogo`.
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-validator
+  name: caminogo-test-validator
 spec:
   # Add fields here
   deploymentName: test-validator
   nodeCount: 5
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.0
   imagePullSecrets:
   - name: regcred
@@ -55,7 +55,7 @@ Operator updates deployment's status and emits events on every update:
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-validator
+  name: caminogo-test-validator
 spec:
 ...
 status:
@@ -81,12 +81,12 @@ To create a new node for an existing network or create a new chain with pregener
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-worker
+  name: caminogo-test-worker
 spec:
   deploymentName: test-worker
   bootstrapperURL: avago-test-validator-0-service
   nodeCount: 1
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.0
   env:
   - name: AVAGO_LOG_LEVEL
@@ -113,7 +113,7 @@ spec:
 
 `nodeCount`
 
-For fully custom deployment see `config/samples/chain_v1alpha1_avalanchego_static.yaml`
+For fully custom deployment see `config/samples/chain_v1alpha1_caminogo_static.yaml`
 
 ## Exposing an Caminogo node
 To expose a node to external networks (Internet), please create an ingress object (namnespace should match)

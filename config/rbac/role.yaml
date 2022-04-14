@@ -21,7 +21,7 @@ rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes
+  - caminogoes
   verbs:
   - create
   - delete
@@ -33,13 +33,13 @@ rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes/finalizers
+  - caminogoes/finalizers
   verbs:
   - update
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes/status
+  - caminogoes/status
   verbs:
   - get
   - patch

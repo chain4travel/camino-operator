@@ -27,7 +27,7 @@ import (
 
 	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
 
-	avalanchegoConstants "github.com/chain4travel/caminogo/utils/constants"
+	caminogoConstants "github.com/chain4travel/caminogo/utils/constants"
 )
 
 func (r *CaminogoReconciler) avagoConfigMap(
@@ -179,7 +179,7 @@ func (r *CaminogoReconciler) avagoStatefulSet(
 		initContainers = r.getAvagoInitContainer(instance)
 		envVars = append(envVars, corev1.EnvVar{
 			Name:  "AVAGO_CONFIG_FILE",
-			Value: "/etc/avalanchego/conf/conf.json",
+			Value: "/etc/caminogo/conf/conf.json",
 		})
 	}
 
@@ -282,7 +282,7 @@ func (r *CaminogoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Camin
 			},
 			VolumeMounts: []corev1.VolumeMount{
 				{
-					Name:      "avalanchego-init-script",
+					Name:      "caminogo-init-script",
 					MountPath: "/tmp/script",
 					ReadOnly:  true,
 				},
@@ -329,7 +329,7 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 		},
 		{
 			Name:  "AVAGO_DB_DIR",
-			Value: "/root/.avalanchego",
+			Value: "/root/.caminogo",
 		},
 	}
 
@@ -337,10 +337,10 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 	if (instance.Spec.BootstrapperURL == "") || (len(instance.Spec.Certificates) > 0) || len(instance.Spec.ExistingSecrets) > 0 {
 		envVars = append(envVars, corev1.EnvVar{
 			Name:  "AVAGO_STAKING_TLS_CERT_FILE",
-			Value: "/etc/avalanchego/st-certs/staker.crt",
+			Value: "/etc/caminogo/st-certs/staker.crt",
 		}, corev1.EnvVar{
 			Name:  "AVAGO_STAKING_TLS_KEY_FILE",
-			Value: "/etc/avalanchego/st-certs/staker.key",
+			Value: "/etc/caminogo/st-certs/staker.key",
 		})
 	}
 
@@ -358,12 +358,12 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 		switch v.Name {
 		case "AVAGO_NETWORK_ID":
 			if networkId, err := strconv.Atoi(v.Value); err == nil {
-				if uint32(networkId) != avalanchegoConstants.MainnetID &&
-					uint32(networkId) != avalanchegoConstants.FujiID &&
-					uint32(networkId) != avalanchegoConstants.LocalID {
+				if uint32(networkId) != caminogoConstants.MainnetID &&
+					uint32(networkId) != caminogoConstants.FujiID &&
+					uint32(networkId) != caminogoConstants.LocalID {
 					envVars = append(envVars, corev1.EnvVar{
 						Name:  "AVAGO_GENESIS",
-						Value: "/etc/avalanchego/st-certs/genesis.json",
+						Value: "/etc/caminogo/st-certs/genesis.json",
 					})
 				}
 			}
@@ -387,17 +387,17 @@ func (r *CaminogoReconciler) getVolumeMounts(instance *chainv1alpha1.Caminogo, n
 	return []corev1.VolumeMount{
 		{
 			Name:      avaGoPrefix + "db-" + name,
-			MountPath: "/root/.avalanchego",
+			MountPath: "/root/.caminogo",
 			ReadOnly:  false,
 		},
 		{
 			Name:      "init-volume",
-			MountPath: "/etc/avalanchego/conf",
+			MountPath: "/etc/caminogo/conf",
 			ReadOnly:  true,
 		},
 		{
 			Name:      avaGoPrefix + "cert-" + name,
-			MountPath: "/etc/avalanchego/st-certs",
+			MountPath: "/etc/caminogo/st-certs",
 			ReadOnly:  true,
 		},
 	}
@@ -422,7 +422,7 @@ func (r *CaminogoReconciler) getVolumes(instance *chainv1alpha1.Caminogo, name s
 			},
 		},
 		{
-			Name: "avalanchego-init-script",
+			Name: "caminogo-init-script",
 			VolumeSource: corev1.VolumeSource{
 				ConfigMap: &corev1.ConfigMapVolumeSource{
 					LocalObjectReference: corev1.LocalObjectReference{

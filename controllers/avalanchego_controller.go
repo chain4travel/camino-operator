@@ -44,9 +44,9 @@ const (
 	createStsSync  asyncCreateStatefulSet = false
 )
 
-//+kubebuilder:rbac:groups=chain.avax.network,resources=avalanchegoes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=chain.avax.network,resources=avalanchegoes/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=chain.avax.network,resources=avalanchegoes/finalizers,verbs=update
+//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes/finalizers,verbs=update
 //+kubebuilder:rbac:groups=apps,resources=statefulsets,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=persistentvolumeclaims,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=secrets,verbs=get;list;watch;create;update;patch;delete

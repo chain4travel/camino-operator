@@ -1,4 +1,4 @@
 ## Append samples you want in your CSV to this file as resources ##
 resources:
-- chain_v1alpha1_avalanchego.yaml
+- chain_v1alpha1_caminogo.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

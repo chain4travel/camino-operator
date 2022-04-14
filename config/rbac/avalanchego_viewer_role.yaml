@@ -1,13 +1,13 @@
-# permissions for end users to view avalanchegoes.
+# permissions for end users to view caminogoes.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: avalanchego-viewer-role
+  name: caminogo-viewer-role
 rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes
+  - caminogoes
   verbs:
   - get
   - list
@@ -15,6 +15,6 @@ rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes/status
+  - caminogoes/status
   verbs:
   - get

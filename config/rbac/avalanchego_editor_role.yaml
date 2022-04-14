@@ -1,13 +1,13 @@
-# permissions for end users to edit avalanchegoes.
+# permissions for end users to edit caminogoes.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: avalanchego-editor-role
+  name: caminogo-editor-role
 rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes
+  - caminogoes
   verbs:
   - create
   - delete
@@ -19,6 +19,6 @@ rules:
 - apiGroups:
   - chain.avax.network
   resources:
-  - avalanchegoes/status
+  - caminogoes/status
   verbs:
   - get

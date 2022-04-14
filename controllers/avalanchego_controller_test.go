@@ -14,13 +14,13 @@ import (
 
 var _ = Describe("Caminogo controller", func() {
 	const (
-		CaminogoValidatorName           = "avalanchego-test-validator"
+		CaminogoValidatorName           = "caminogo-test-validator"
 		CaminogoNamespace               = "default"
 		CaminogoValidatorDeploymentName = "test-validator"
 
-		CaminogoWValidatorName           = "avalanchego-test-wvalidator"
+		CaminogoWValidatorName           = "caminogo-test-wvalidator"
 		CaminogowValidatorDeploymentName = "test-wvalidator"
-		CaminogoWorkerName               = "avalanchego-test-worker"
+		CaminogoWorkerName               = "caminogo-test-worker"
 		CaminogoWorkerDeploymentName     = "test-worker"
 
 		CaminogoKind       = "Caminogo"

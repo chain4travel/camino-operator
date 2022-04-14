@@ -57,7 +57,7 @@ type CaminogoSpec struct {
 
 	// Docker image name. Will be used in chain deployments
 	// +optional
-	// +kubebuilder:default:="avaplatform/avalanchego"
+	// +kubebuilder:default:="avaplatform/caminogo"
 	Image string `json:"image,omitempty"`
 
 	// Docker image tag. Will be used in chain deployments
@@ -65,7 +65,7 @@ type CaminogoSpec struct {
 	// +kubebuilder:default:="latest"
 	Tag string `json:"tag,omitempty"`
 
-	// Environment variables for avalanchego.
+	// Environment variables for caminogo.
 	// +optional
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
@@ -112,7 +112,7 @@ type CaminogoStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Caminogo is the Schema for the avalanchegoes API
+// Caminogo is the Schema for the caminogoes API
 type Caminogo struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

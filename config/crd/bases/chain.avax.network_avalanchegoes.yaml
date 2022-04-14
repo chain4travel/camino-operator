@@ -6,20 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.1
   creationTimestamp: null
-  name: avalanchegoes.chain.avax.network
+  name: caminogoes.chain.avax.network
 spec:
   group: chain.avax.network
   names:
     kind: Caminogo
     listKind: CaminogoList
-    plural: avalanchegoes
-    singular: avalanchego
+    plural: caminogoes
+    singular: caminogo
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Caminogo is the Schema for the avalanchegoes API
+        description: Caminogo is the Schema for the caminogoes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -58,7 +58,7 @@ spec:
                 description: Prefix,used for kubernetes objects during creation
                 type: string
               env:
-                description: Environment variables for avalanchego.
+                description: Environment variables for caminogo.
                 items:
                   description: EnvVar represents an environment variable present in
                     a Container.
@@ -171,7 +171,7 @@ spec:
                   network
                 type: string
               image:
-                default: avaplatform/avalanchego
+                default: avaplatform/caminogo
                 description: Docker image name. Will be used in chain deployments
                 type: string
               imagePullSecrets:

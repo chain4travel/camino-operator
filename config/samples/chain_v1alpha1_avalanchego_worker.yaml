@@ -1,12 +1,12 @@
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-worker
+  name: caminogo-test-worker
 spec:
   deploymentName: test-worker
   bootstrapperURL: avago-test-validator-0-service
   nodeCount: 2
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.6.0
   env:
   - name: AVAGO_LOG_LEVEL

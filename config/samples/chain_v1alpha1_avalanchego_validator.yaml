@@ -1,12 +1,12 @@
 apiVersion: chain.avax.network/v1alpha1
 kind: Caminogo
 metadata:
-  name: avalanchego-test-validator
+  name: caminogo-test-validator
 spec:
   # Add fields here
   deploymentName: test-validator
   nodeCount: 5
-  image: avaplatform/avalanchego
+  image: avaplatform/caminogo
   tag: v1.7.3
   env:
   - name: AVAGO_LOG_LEVEL
