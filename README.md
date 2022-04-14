@@ -39,7 +39,7 @@ spec:
 
 `image` and `tag` docker image and tag
 
-`env` common configuration for chain nodes, check the full list here: https://github.com/ava-labs/avalanchego/blob/master/config/keys.go
+`env` common configuration for chain nodes, check the full list here: https://github.com/chain4travel/caminogo/blob/master/config/keys.go
 
 `resources` amount of CPU and RAM, an individual node would be able to use (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 

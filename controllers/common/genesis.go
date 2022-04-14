@@ -16,7 +16,7 @@ limitations under the License.
 
 package common
 
-// These structs are the analogs of those in https://github.com/ava-labs/avalanchego/blob/master/genesis/config.go
+// These structs are the analogs of those in https://github.com/chain4travel/caminogo/blob/master/genesis/config.go
 // Except these have string fields where the structs in the linked file have ids.ShortID
 type Genesis struct {
 	NetworkID                  int             `json:"networkID"`

@@ -29,8 +29,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	chainv1alpha1 "github.com/ava-labs/avalanchego-operator/api/v1alpha1"
-	"github.com/ava-labs/avalanchego-operator/controllers/common"
+	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
+	"github.com/chain4travel/caminogo-operator/controllers/common"
 )
 
 // AvalanchegoReconciler reconciles a Avalanchego object

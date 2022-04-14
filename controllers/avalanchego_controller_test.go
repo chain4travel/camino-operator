@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	chainv1alpha1 "github.com/ava-labs/avalanchego-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"

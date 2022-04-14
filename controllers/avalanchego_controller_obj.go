@@ -25,9 +25,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"strconv"
 
-	chainv1alpha1 "github.com/ava-labs/avalanchego-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
 
-	avalanchegoConstants "github.com/ava-labs/avalanchego/utils/constants"
+	avalanchegoConstants "github.com/chain4travel/caminogo/utils/constants"
 )
 
 func (r *AvalanchegoReconciler) avagoConfigMap(

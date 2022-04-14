@@ -33,7 +33,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	chainv1alpha1 "github.com/ava-labs/avalanchego-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
 	//+kubebuilder:scaffold:imports
 )
 
