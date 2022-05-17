@@ -33,7 +33,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -81,7 +81,7 @@ var _ = BeforeSuite(func() {
 	})
 	Expect(err).ToNot(HaveOccurred())
 
-	err = (&CaminogoReconciler{
+	err = (&CaminoReconciler{
 		Client: k8sManager.GetClient(),
 		Scheme: k8sManager.GetScheme(),
 	}).SetupWithManager(k8sManager)

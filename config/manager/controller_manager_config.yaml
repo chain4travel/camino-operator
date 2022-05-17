@@ -8,4 +8,4 @@ webhook:
   port: 9443
 leaderElection:
   leaderElect: true
-  resourceName: ecfcc342.avax.network
+  resourceName: ecfcc342.camino.foundation

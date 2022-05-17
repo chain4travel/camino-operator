@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
-	"github.com/chain4travel/caminogo-operator/controllers"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
+	"github.com/chain4travel/camino-operator/controllers"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -71,18 +71,18 @@ func main() {
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "ecfcc342.avax.network",
+		LeaderElectionID:       "ecfcc342.camino.foundation",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
 
-	if err := (&controllers.CaminogoReconciler{
+	if err := (&controllers.CaminoReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Caminogo")
+		setupLog.Error(err, "unable to create controller", "controller", "Camino")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

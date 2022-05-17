@@ -28,15 +28,15 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # This variable is used to construct full image tags for bundle and catalog images.
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# avax.network/caminogo-operator-bundle:$VERSION and avax.network/caminogo-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= avax.network/caminogo-operator
+# camino.foundation/camino-operator-bundle:$VERSION and camino.foundation/camino-operator-catalog:$VERSION.
+IMAGE_TAG_BASE ?= camino.foundation/camino-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 
 # Image URL to use all building/pushing image targets
-IMG ?= caminoplatform/caminogo-operator:$(VERSION)
+IMG ?= c4tplatform/camino-operator:$(VERSION)
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.

@@ -19,9 +19,9 @@ rules:
   - update
   - watch
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes
+  - caminonodes
   verbs:
   - create
   - delete
@@ -31,15 +31,15 @@ rules:
   - update
   - watch
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes/finalizers
+  - caminonodes/finalizers
   verbs:
   - update
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes/status
+  - caminonodes/status
   verbs:
   - get
   - patch

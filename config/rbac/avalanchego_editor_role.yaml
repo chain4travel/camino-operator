@@ -1,13 +1,13 @@
-# permissions for end users to edit caminogoes.
+# permissions for end users to edit caminonodes.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: caminogo-editor-role
+  name: camino-editor-role
 rules:
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes
+  - caminonodes
   verbs:
   - create
   - delete
@@ -17,8 +17,8 @@ rules:
   - update
   - watch
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes/status
+  - caminonodes/status
   verbs:
   - get

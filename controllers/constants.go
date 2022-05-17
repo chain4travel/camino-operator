@@ -16,4 +16,4 @@ limitations under the License.
 
 package controllers
 
-const avaGoPrefix = "avago-"
+const avaGoPrefix = "camino-"

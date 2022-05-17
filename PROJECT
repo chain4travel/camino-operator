@@ -1,19 +1,19 @@
-domain: avax.network
+domain: camino.foundation
 layout:
 - go.kubebuilder.io/v3
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
-projectName: caminogo-operator
-repo: github.com/chain4travel/caminogo-operator
+projectName: camino-operator
+repo: github.com/chain4travel/camino-operator
 resources:
 - api:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: avax.network
+  domain: camino.foundation
   group: chain
-  kind: Caminogo
-  path: github.com/chain4travel/caminogo-operator/api/v1alpha1
+  kind: Camino
+  path: github.com/chain4travel/camino-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

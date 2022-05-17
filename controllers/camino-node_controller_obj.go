@@ -17,21 +17,22 @@ limitations under the License.
 package controllers
 
 import (
+	"reflect"
+	"strconv"
+
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"reflect"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-	"strconv"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
 
 	caminogoConstants "github.com/chain4travel/caminogo/utils/constants"
 )
 
-func (r *CaminogoReconciler) avagoConfigMap(
-	instance *chainv1alpha1.Caminogo,
+func (r *CaminoReconciler) caminoConfigMap(
+	instance *chainv1alpha1.Camino,
 	name string,
 	script string,
 ) *corev1.ConfigMap {
@@ -55,8 +56,8 @@ func (r *CaminogoReconciler) avagoConfigMap(
 	return cm
 }
 
-func (r *CaminogoReconciler) avagoSecret(
-	instance *chainv1alpha1.Caminogo,
+func (r *CaminoReconciler) caminoSecret(
+	instance *chainv1alpha1.Camino,
 	name string,
 	certificate string,
 	key string,
@@ -85,8 +86,8 @@ func (r *CaminogoReconciler) avagoSecret(
 	return secr
 }
 
-func (r *CaminogoReconciler) avagoService(
-	instance *chainv1alpha1.Caminogo,
+func (r *CaminoReconciler) caminoService(
+	instance *chainv1alpha1.Camino,
 	name string,
 ) *corev1.Service {
 	svc := &corev1.Service{
@@ -124,8 +125,8 @@ func (r *CaminogoReconciler) avagoService(
 	return svc
 }
 
-func (r *CaminogoReconciler) avagoPVC(
-	instance *chainv1alpha1.Caminogo,
+func (r *CaminoReconciler) caminoPVC(
+	instance *chainv1alpha1.Camino,
 	name string,
 ) *corev1.PersistentVolumeClaim {
 	pvc := &corev1.PersistentVolumeClaim{
@@ -153,8 +154,8 @@ func (r *CaminogoReconciler) avagoPVC(
 	return pvc
 }
 
-func (r *CaminogoReconciler) avagoStatefulSet(
-	instance *chainv1alpha1.Caminogo,
+func (r *CaminoReconciler) caminoStatefulSet(
+	instance *chainv1alpha1.Camino,
 	name string,
 	nodeId int,
 ) *appsv1.StatefulSet {
@@ -171,14 +172,14 @@ func (r *CaminogoReconciler) avagoStatefulSet(
 	index := name[len(name)-1:]
 	if (index == "0") && (instance.Spec.BootstrapperURL == "") {
 		envVars = append(envVars, corev1.EnvVar{
-			Name:  "AVAGO_BOOTSTRAP_IPS",
+			Name:  "CAMINO_BOOTSTRAP_IPS",
 			Value: "",
 		})
 	}
 	if (index != "0") || (instance.Spec.BootstrapperURL != "") {
 		initContainers = r.getAvagoInitContainer(instance)
 		envVars = append(envVars, corev1.EnvVar{
-			Name:  "AVAGO_CONFIG_FILE",
+			Name:  "CAMINO_CONFIG_FILE",
 			Value: "/etc/caminogo/conf/conf.json",
 		})
 	}
@@ -215,7 +216,7 @@ func (r *CaminogoReconciler) avagoStatefulSet(
 					InitContainers: initContainers,
 					Containers: []corev1.Container{
 						{
-							Name:            "avago",
+							Name:            "camino",
 							Image:           instance.Spec.Image + ":" + instance.Spec.Tag,
 							ImagePullPolicy: "IfNotPresent",
 							Resources: corev1.ResourceRequirements{
@@ -260,11 +261,11 @@ func (r *CaminogoReconciler) avagoStatefulSet(
 	return sts
 }
 
-func (r *CaminogoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Caminogo) []corev1.Container {
+func (r *CaminoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Camino) []corev1.Container {
 	initContainers := []corev1.Container{
 		{
 			Name:  "init-bootnode-ip",
-			Image: "caminoplatform/dnsutils:1.0.0",
+			Image: "c4tplatform/dnsutils:1.0.0",
 			Env: []corev1.EnvVar{
 				{
 					Name:  "CONFIG_PATH",
@@ -297,14 +298,14 @@ func (r *CaminogoReconciler) getAvagoInitContainer(instance *chainv1alpha1.Camin
 	return initContainers
 }
 
-func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []corev1.EnvVar {
+func (r *CaminoReconciler) getEnvVars(instance *chainv1alpha1.Camino) []corev1.EnvVar {
 	envVars := []corev1.EnvVar{
 		{
-			Name:  "AVAGO_HTTP_HOST",
+			Name:  "CAMINO_HTTP_HOST",
 			Value: "0.0.0.0",
 		},
 		{
-			Name: "AVAGO_PUBLIC_IP",
+			Name: "CAMINO_PUBLIC_IP",
 			ValueFrom: &corev1.EnvVarSource{
 				FieldRef: &corev1.ObjectFieldSelector{
 					FieldPath: "status.podIP",
@@ -312,23 +313,23 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 			},
 		},
 		{
-			Name:  "AVAGO_NETWORK_ID",
+			Name:  "CAMINO_NETWORK_ID",
 			Value: "12346",
 		},
 		{
-			Name:  "AVAGO_STAKING_ENABLED",
+			Name:  "CAMINO_STAKING_ENABLED",
 			Value: "true",
 		},
 		{
-			Name:  "AVAGO_HTTP_PORT",
+			Name:  "CAMINO_HTTP_PORT",
 			Value: "9650",
 		},
 		{
-			Name:  "AVAGO_STAKING_PORT",
+			Name:  "CAMINO_STAKING_PORT",
 			Value: "9651",
 		},
 		{
-			Name:  "AVAGO_DB_DIR",
+			Name:  "CAMINO_DB_DIR",
 			Value: "/root/.caminogo",
 		},
 	}
@@ -336,10 +337,10 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 	//Append certificates, if it is a new network or cert or existing secrets are provided
 	if (instance.Spec.BootstrapperURL == "") || (len(instance.Spec.Certificates) > 0) || len(instance.Spec.ExistingSecrets) > 0 {
 		envVars = append(envVars, corev1.EnvVar{
-			Name:  "AVAGO_STAKING_TLS_CERT_FILE",
+			Name:  "CAMINO_STAKING_TLS_CERT_FILE",
 			Value: "/etc/caminogo/st-certs/staker.crt",
 		}, corev1.EnvVar{
-			Name:  "AVAGO_STAKING_TLS_KEY_FILE",
+			Name:  "CAMINO_STAKING_TLS_KEY_FILE",
 			Value: "/etc/caminogo/st-certs/staker.key",
 		})
 	}
@@ -353,16 +354,16 @@ func (r *CaminogoReconciler) getEnvVars(instance *chainv1alpha1.Caminogo) []core
 		}
 	}
 
-	// Adding AVAGO_GENESIS env var only for custom networks
+	// Adding CAMINO_GENESIS env var only for custom networks
 	for _, v := range envVars {
 		switch v.Name {
-		case "AVAGO_NETWORK_ID":
+		case "CAMINO_NETWORK_ID":
 			if networkId, err := strconv.Atoi(v.Value); err == nil {
 				if uint32(networkId) != caminogoConstants.MainnetID &&
 					uint32(networkId) != caminogoConstants.FujiID &&
 					uint32(networkId) != caminogoConstants.LocalID {
 					envVars = append(envVars, corev1.EnvVar{
-						Name:  "AVAGO_GENESIS",
+						Name:  "CAMINO_GENESIS",
 						Value: "/etc/caminogo/st-certs/genesis.json",
 					})
 				}
@@ -383,7 +384,7 @@ func indexOf(env []corev1.EnvVar, name string) int {
 	return -1
 }
 
-func (r *CaminogoReconciler) getVolumeMounts(instance *chainv1alpha1.Caminogo, name string) []corev1.VolumeMount {
+func (r *CaminoReconciler) getVolumeMounts(instance *chainv1alpha1.Camino, name string) []corev1.VolumeMount {
 	return []corev1.VolumeMount{
 		{
 			Name:      avaGoPrefix + "db-" + name,
@@ -403,7 +404,7 @@ func (r *CaminogoReconciler) getVolumeMounts(instance *chainv1alpha1.Caminogo, n
 	}
 }
 
-func (r *CaminogoReconciler) getVolumes(instance *chainv1alpha1.Caminogo, name string, nodeId int) []corev1.Volume {
+func (r *CaminoReconciler) getVolumes(instance *chainv1alpha1.Camino, name string, nodeId int) []corev1.Volume {
 
 	var secretName string
 	if len(instance.Spec.ExistingSecrets) > 0 {

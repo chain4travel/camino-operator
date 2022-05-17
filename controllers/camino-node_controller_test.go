@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
@@ -12,19 +12,19 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 )
 
-var _ = Describe("Caminogo controller", func() {
+var _ = Describe("Camino controller", func() {
 	const (
-		CaminogoValidatorName           = "caminogo-test-validator"
-		CaminogoNamespace               = "default"
-		CaminogoValidatorDeploymentName = "test-validator"
+		CaminoValidatorName           = "camino-test-validator"
+		CaminoNamespace               = "default"
+		CaminoValidatorDeploymentName = "test-validator"
 
-		CaminogoWValidatorName           = "caminogo-test-wvalidator"
-		CaminogowValidatorDeploymentName = "test-wvalidator"
-		CaminogoWorkerName               = "caminogo-test-worker"
-		CaminogoWorkerDeploymentName     = "test-worker"
+		CaminoWValidatorName           = "camino-test-wvalidator"
+		CaminowValidatorDeploymentName = "test-wvalidator"
+		CaminoWorkerName               = "camino-test-worker"
+		CaminoWorkerDeploymentName     = "test-worker"
 
-		CaminogoKind       = "Caminogo"
-		CaminogoAPIVersion = "chain.avax.network/v1alpha1"
+		CaminoKind       = "Camino"
+		CaminoAPIVersion = "chain.camino.foundation/v1alpha1"
 
 		timeout  = time.Second * 60
 		interval = time.Millisecond * 500
@@ -33,25 +33,25 @@ var _ = Describe("Caminogo controller", func() {
 	Context("Empty bootstrapperURL, genesis and certificates", func() {
 		It("Should handle new chain creation", func() {
 
-			spec := chainv1alpha1.CaminogoSpec{
+			spec := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoValidatorDeploymentName,
+				DeploymentName: CaminoValidatorDeploymentName,
 				NodeCount:      5,
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
 			}
 			key := types.NamespacedName{
-				Name:      CaminogoValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreate := &chainv1alpha1.Caminogo{
+			toCreate := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      key.Name,
@@ -60,19 +60,19 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: spec,
 			}
 
-			By("Creating Caminogo chain successfully")
+			By("Creating Camino chain successfully")
 			Expect(k8sClient.Create(context.Background(), toCreate)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return f.Status.Error == ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if amount of services created equals nodeCount")
 
-			fetched := &chainv1alpha1.Caminogo{}
+			fetched := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), key, fetched)
@@ -85,13 +85,13 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), key, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})
@@ -100,9 +100,9 @@ var _ = Describe("Caminogo controller", func() {
 	Context("Static genesis and certificates configuration", func() {
 		It("Should handle new chain creation with predefined starting block and ceritficates", func() {
 
-			specBootstrapper := chainv1alpha1.CaminogoSpec{
+			specBootstrapper := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogowValidatorDeploymentName,
+				DeploymentName: CaminowValidatorDeploymentName,
 				NodeCount:      1,
 				Genesis:        `{"networkID":12346,"allocations":[{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh","initialAmount":0,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","initialAmount":300000000000000000,"unlockSchedule":[{"amount":20000000000000000},{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1ur873jhz9qnaqv5qthk5sn3e8nj3e0kmzpjrhp","initialAmount":10000000000000000,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]}],"startTime":1630987200,"initialStakeDuration":31536000,"initialStakeDurationOffset":5400,"initialStakedFunds":["X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh"],"initialStakers":[{"nodeID":"NodeID-4XsLhvvKKgXyBqJbUS9V74eiGDbZf5HYy","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-JqUCBkg87FYDvkiZNSG3hFt3pdsYbLtm4","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CvwPtxUScTomPZ6o8qhbqSHDRpaMhBD9w","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-3mxMtWgHrWqHcPwEMEJwcS24kzLQbxort","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CYXgGSJ3VtU6NSRoroJoavVDW3S2DyccV","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000}],"cChainGenesis":"{\"config\":{\"chainId\":43112,\"homesteadBlock\":0,\"daoForkBlock\":0,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"apricotPhase1BlockTimestamp\":0,\"apricotPhase2BlockTimestamp\":0},\"nonce\":\"0x0\",\"timestamp\":\"0x0\",\"extraData\":\"0x00\",\"gasLimit\":\"0x5f5e100\",\"difficulty\":\"0x0\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"coinbase\":\"0x0000000000000000000000000000000000000000\",\"alloc\":{\"8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC\":{\"balance\":\"0x295BE96E64066972000000\"}},\"number\":\"0x0\",\"gasUsed\":\"0x0\",\"parentHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\"}","message":"Make time for fun"}`,
 				Certificates: []chainv1alpha1.Certificate{
@@ -113,19 +113,19 @@ var _ = Describe("Caminogo controller", func() {
 				},
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
 			}
 			keyBootstrapper := types.NamespacedName{
-				Name:      CaminogoWValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoWValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreateBootstrapper := &chainv1alpha1.Caminogo{
+			toCreateBootstrapper := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      keyBootstrapper.Name,
@@ -134,9 +134,9 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: specBootstrapper,
 			}
 
-			specWorker := chainv1alpha1.CaminogoSpec{
+			specWorker := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoWorkerDeploymentName,
+				DeploymentName: CaminoWorkerDeploymentName,
 				NodeCount:      1,
 				Genesis:        `{"networkID":12346,"allocations":[{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh","initialAmount":0,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","initialAmount":300000000000000000,"unlockSchedule":[{"amount":20000000000000000},{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1ur873jhz9qnaqv5qthk5sn3e8nj3e0kmzpjrhp","initialAmount":10000000000000000,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]}],"startTime":1630987200,"initialStakeDuration":31536000,"initialStakeDurationOffset":5400,"initialStakedFunds":["X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh"],"initialStakers":[{"nodeID":"NodeID-4XsLhvvKKgXyBqJbUS9V74eiGDbZf5HYy","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-JqUCBkg87FYDvkiZNSG3hFt3pdsYbLtm4","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CvwPtxUScTomPZ6o8qhbqSHDRpaMhBD9w","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-3mxMtWgHrWqHcPwEMEJwcS24kzLQbxort","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CYXgGSJ3VtU6NSRoroJoavVDW3S2DyccV","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000}],"cChainGenesis":"{\"config\":{\"chainId\":43112,\"homesteadBlock\":0,\"daoForkBlock\":0,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"apricotPhase1BlockTimestamp\":0,\"apricotPhase2BlockTimestamp\":0},\"nonce\":\"0x0\",\"timestamp\":\"0x0\",\"extraData\":\"0x00\",\"gasLimit\":\"0x5f5e100\",\"difficulty\":\"0x0\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"coinbase\":\"0x0000000000000000000000000000000000000000\",\"alloc\":{\"8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC\":{\"balance\":\"0x295BE96E64066972000000\"}},\"number\":\"0x0\",\"gasUsed\":\"0x0\",\"parentHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\"}","message":"Make time for fun"}`,
 				Certificates: []chainv1alpha1.Certificate{
@@ -147,19 +147,19 @@ var _ = Describe("Caminogo controller", func() {
 				},
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
 			}
 			keyWorker := types.NamespacedName{
-				Name:      CaminogoWorkerName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoWorkerName,
+				Namespace: CaminoNamespace,
 			}
-			toCreateWorker := &chainv1alpha1.Caminogo{
+			toCreateWorker := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      keyWorker.Name,
@@ -168,39 +168,39 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: specWorker,
 			}
 
-			By("Creating Caminogo Bootstrapper successfully")
+			By("Creating Camino Bootstrapper successfully")
 			Expect(k8sClient.Create(context.Background(), toCreateBootstrapper)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), keyBootstrapper, f)
 				return f.Status.Error == ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if Bootstrapper's Uri is exposed")
 
-			fetchedBootstrapper := &chainv1alpha1.Caminogo{}
+			fetchedBootstrapper := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), keyBootstrapper, fetchedBootstrapper)
 				return fetchedBootstrapper.Spec.NodeCount == len(fetchedBootstrapper.Status.NetworkMembersURI)
 			}, timeout, interval).Should(BeTrue())
 
-			By("Creating Caminogo Worker successfully")
+			By("Creating Camino Worker successfully")
 			toCreateWorker.Spec.BootstrapperURL = fetchedBootstrapper.Status.NetworkMembersURI[0]
 			Expect(k8sClient.Create(context.Background(), toCreateWorker)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), keyWorker, f)
 				return f.Status.Error == ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if Worker's Uri is exposed")
 
-			fetchedWorker := &chainv1alpha1.Caminogo{}
+			fetchedWorker := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), keyWorker, fetchedWorker)
@@ -209,24 +209,24 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), keyBootstrapper, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), keyBootstrapper, f)
 			}, timeout, interval).ShouldNot(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), keyWorker, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), keyWorker, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})
@@ -235,13 +235,13 @@ var _ = Describe("Caminogo controller", func() {
 
 	Context("Pre-defined secrets", func() {
 		It("Should handle new chain creation", func() {
-			spec := chainv1alpha1.CaminogoSpec{
+			spec := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoValidatorDeploymentName,
+				DeploymentName: CaminoValidatorDeploymentName,
 				NodeCount:      5,
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
@@ -254,13 +254,13 @@ var _ = Describe("Caminogo controller", func() {
 				},
 			}
 			key := types.NamespacedName{
-				Name:      CaminogoValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreate := &chainv1alpha1.Caminogo{
+			toCreate := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      key.Name,
@@ -269,19 +269,19 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: spec,
 			}
 
-			By("Creating Caminogo chain successfully")
+			By("Creating Camino chain successfully")
 			Expect(k8sClient.Create(context.Background(), toCreate)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return f.Status.Error == ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if amount of services created equals nodeCount")
 
-			fetched := &chainv1alpha1.Caminogo{}
+			fetched := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), key, fetched)
@@ -294,13 +294,13 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), key, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})
@@ -308,13 +308,13 @@ var _ = Describe("Caminogo controller", func() {
 
 	Context("Pre-defined secrets", func() {
 		It("Should not handle new chain creation if number of secrets does not match to number of nodes", func() {
-			spec := chainv1alpha1.CaminogoSpec{
+			spec := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoValidatorDeploymentName,
+				DeploymentName: CaminoValidatorDeploymentName,
 				NodeCount:      5,
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
@@ -323,13 +323,13 @@ var _ = Describe("Caminogo controller", func() {
 				},
 			}
 			key := types.NamespacedName{
-				Name:      CaminogoValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreate := &chainv1alpha1.Caminogo{
+			toCreate := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      key.Name,
@@ -338,19 +338,19 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: spec,
 			}
 
-			By("Creating Caminogo chain successfully")
+			By("Creating Camino chain successfully")
 			Expect(k8sClient.Create(context.Background(), toCreate)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return f.Status.Error != ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if amount of services created equals nodeCount")
 
-			fetched := &chainv1alpha1.Caminogo{}
+			fetched := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), key, fetched)
@@ -363,13 +363,13 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), key, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})
@@ -377,13 +377,13 @@ var _ = Describe("Caminogo controller", func() {
 
 	Context("Pre-defined secrets", func() {
 		It("Should not handle new chain creation if Genesis specified", func() {
-			spec := chainv1alpha1.CaminogoSpec{
+			spec := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoValidatorDeploymentName,
+				DeploymentName: CaminoValidatorDeploymentName,
 				NodeCount:      5,
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
@@ -397,13 +397,13 @@ var _ = Describe("Caminogo controller", func() {
 				Genesis: `{"networkID":12346,"allocations":[{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh","initialAmount":0,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","initialAmount":300000000000000000,"unlockSchedule":[{"amount":20000000000000000},{"amount":10000000000000000,"locktime":1633824000}]},{"ethAddr":"0xb3d82b1367d362de99ab59a658165aff520cbd4d","avaxAddr":"X-custom1ur873jhz9qnaqv5qthk5sn3e8nj3e0kmzpjrhp","initialAmount":10000000000000000,"unlockSchedule":[{"amount":10000000000000000,"locktime":1633824000}]}],"startTime":1630987200,"initialStakeDuration":31536000,"initialStakeDurationOffset":5400,"initialStakedFunds":["X-custom1g65uqn6t77p656w64023nh8nd9updzmxwd59gh"],"initialStakers":[{"nodeID":"NodeID-4XsLhvvKKgXyBqJbUS9V74eiGDbZf5HYy","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-JqUCBkg87FYDvkiZNSG3hFt3pdsYbLtm4","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CvwPtxUScTomPZ6o8qhbqSHDRpaMhBD9w","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-3mxMtWgHrWqHcPwEMEJwcS24kzLQbxort","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000},{"nodeID":"NodeID-CYXgGSJ3VtU6NSRoroJoavVDW3S2DyccV","rewardAddress":"X-custom18jma8ppw3nhx5r4ap8clazz0dps7rv5u9xde7p","delegationFee":5000}],"cChainGenesis":"{\"config\":{\"chainId\":43112,\"homesteadBlock\":0,\"daoForkBlock\":0,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"apricotPhase1BlockTimestamp\":0,\"apricotPhase2BlockTimestamp\":0},\"nonce\":\"0x0\",\"timestamp\":\"0x0\",\"extraData\":\"0x00\",\"gasLimit\":\"0x5f5e100\",\"difficulty\":\"0x0\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"coinbase\":\"0x0000000000000000000000000000000000000000\",\"alloc\":{\"8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC\":{\"balance\":\"0x295BE96E64066972000000\"}},\"number\":\"0x0\",\"gasUsed\":\"0x0\",\"parentHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\"}","message":"Make time for fun"}`,
 			}
 			key := types.NamespacedName{
-				Name:      CaminogoValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreate := &chainv1alpha1.Caminogo{
+			toCreate := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      key.Name,
@@ -412,19 +412,19 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: spec,
 			}
 
-			By("Creating Caminogo chain successfully")
+			By("Creating Camino chain successfully")
 			Expect(k8sClient.Create(context.Background(), toCreate)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return f.Status.Error != ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if amount of services created equals nodeCount")
 
-			fetched := &chainv1alpha1.Caminogo{}
+			fetched := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), key, fetched)
@@ -437,13 +437,13 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), key, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})
@@ -451,13 +451,13 @@ var _ = Describe("Caminogo controller", func() {
 
 	Context("Pre-defined secrets", func() {
 		It("Should not handle new chain creation if Certificates specified", func() {
-			spec := chainv1alpha1.CaminogoSpec{
+			spec := chainv1alpha1.CaminoSpec{
 				Tag:            "v1.6.3",
-				DeploymentName: CaminogoValidatorDeploymentName,
+				DeploymentName: CaminoValidatorDeploymentName,
 				NodeCount:      5,
 				Env: []corev1.EnvVar{
 					{
-						Name:  "AVAGO_LOG_LEVEL",
+						Name:  "CAMINO_LOG_LEVEL",
 						Value: "debug",
 					},
 				},
@@ -476,13 +476,13 @@ var _ = Describe("Caminogo controller", func() {
 				},
 			}
 			key := types.NamespacedName{
-				Name:      CaminogoValidatorName,
-				Namespace: CaminogoNamespace,
+				Name:      CaminoValidatorName,
+				Namespace: CaminoNamespace,
 			}
-			toCreate := &chainv1alpha1.Caminogo{
+			toCreate := &chainv1alpha1.Camino{
 				TypeMeta: metav1.TypeMeta{
-					Kind:       CaminogoKind,
-					APIVersion: CaminogoAPIVersion,
+					Kind:       CaminoKind,
+					APIVersion: CaminoAPIVersion,
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      key.Name,
@@ -491,19 +491,19 @@ var _ = Describe("Caminogo controller", func() {
 				Spec: spec,
 			}
 
-			By("Creating Caminogo chain successfully")
+			By("Creating Camino chain successfully")
 			Expect(k8sClient.Create(context.Background(), toCreate)).Should(Succeed())
 			time.Sleep(time.Second * 5)
 
 			Eventually(func() bool {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return f.Status.Error != ""
 			}, timeout, interval).Should(BeTrue())
 
 			By("Checking if amount of services created equals nodeCount")
 
-			fetched := &chainv1alpha1.Caminogo{}
+			fetched := &chainv1alpha1.Camino{}
 
 			Eventually(func() bool {
 				_ = k8sClient.Get(context.Background(), key, fetched)
@@ -516,13 +516,13 @@ var _ = Describe("Caminogo controller", func() {
 
 			By("Deleting the scope")
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				_ = k8sClient.Get(context.Background(), key, f)
 				return k8sClient.Delete(context.Background(), f)
 			}, timeout, interval).Should(Succeed())
 
 			Eventually(func() error {
-				f := &chainv1alpha1.Caminogo{}
+				f := &chainv1alpha1.Camino{}
 				return k8sClient.Get(context.Background(), key, f)
 			}, timeout, interval).ShouldNot(Succeed())
 		})

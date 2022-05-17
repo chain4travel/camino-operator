@@ -1,4 +1,4 @@
-module github.com/chain4travel/caminogo-operator
+module github.com/chain4travel/camino-operator
 
 go 1.17
 

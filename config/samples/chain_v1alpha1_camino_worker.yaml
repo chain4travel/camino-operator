@@ -1,15 +1,15 @@
-apiVersion: chain.avax.network/v1alpha1
-kind: Caminogo
+apiVersion: chain.camino.foundation/v1alpha1
+kind: Camino
 metadata:
-  name: caminogo-test-worker
+  name: camino-test-worker
 spec:
   deploymentName: test-worker
-  bootstrapperURL: avago-test-validator-0-service
+  bootstrapperURL: camino-test-validator-0-service
   nodeCount: 2
-  image: caminoplatform/caminogo
+  image: c4tplatform/camino-node
   tag: v1.6.0
   env:
-  - name: AVAGO_LOG_LEVEL
+  - name: CAMINO_LOG_LEVEL
     value: debug
   resources:
     limits:

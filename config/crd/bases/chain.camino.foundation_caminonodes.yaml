@@ -6,20 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.1
   creationTimestamp: null
-  name: caminogoes.chain.avax.network
+  name: caminonodes.chain.camino.foundation
 spec:
-  group: chain.avax.network
+  group: chain.camino.foundation
   names:
-    kind: Caminogo
-    listKind: CaminogoList
-    plural: caminogoes
-    singular: caminogo
+    kind: Camino
+    listKind: CaminoList
+    plural: caminonodes
+    singular: caminonode
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Caminogo is the Schema for the caminogoes API
+        description: Camino is the Schema for the caminonodes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -34,7 +34,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: CaminogoSpec defines the desired state of Caminogo
+            description: CaminoSpec defines the desired state of Camino
             properties:
               bootstrapperURL:
                 description: If specified, nodes will be attached to existing network
@@ -58,7 +58,7 @@ spec:
                 description: Prefix,used for kubernetes objects during creation
                 type: string
               env:
-                description: Environment variables for caminogo.
+                description: Environment variables for camino-node.
                 items:
                   description: EnvVar represents an environment variable present in
                     a Container.
@@ -171,7 +171,7 @@ spec:
                   network
                 type: string
               image:
-                default: caminoplatform/caminogo
+                default: c4tplatform/camino-node
                 description: Docker image name. Will be used in chain deployments
                 type: string
               imagePullSecrets:
@@ -203,7 +203,7 @@ spec:
                 type: object
               resources:
                 description: Resources (requests and limits of CPU and RAM) for the
-                  Caminogo instances
+                  Camino instances
                 properties:
                   limits:
                     additionalProperties:
@@ -234,7 +234,7 @@ spec:
                 type: string
             type: object
           status:
-            description: CaminogoStatus defines the observed state of Caminogo
+            description: CaminoStatus defines the observed state of Camino
             properties:
               bootstrapperURL:
                 description: Service URL of the Bootstrapper node

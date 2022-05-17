@@ -29,12 +29,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
-	"github.com/chain4travel/caminogo-operator/controllers/common"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
+	"github.com/chain4travel/camino-operator/controllers/common"
 )
 
-// CaminogoReconciler reconciles a Caminogo object
-type CaminogoReconciler struct {
+// CaminoReconciler reconciles a Camino object
+type CaminoReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
@@ -44,9 +44,9 @@ const (
 	createStsSync  asyncCreateStatefulSet = false
 )
 
-//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=chain.avax.network,resources=caminogoes/finalizers,verbs=update
+//+kubebuilder:rbac:groups=chain.camino.foundation,resources=caminonodes,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=chain.camino.foundation,resources=caminonodes/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=chain.camino.foundation,resources=caminonodes/finalizers,verbs=update
 //+kubebuilder:rbac:groups=apps,resources=statefulsets,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=persistentvolumeclaims,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=secrets,verbs=get;list;watch;create;update;patch;delete
@@ -55,17 +55,17 @@ const (
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// the Caminogo object against the actual cluster state, and then
+// the Camino object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.9.2/pkg/reconcile
-func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *CaminoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	l := log.FromContext(ctx)
 	l.Info("Started")
-	// Fetch the Caminogo instance
-	instance := &chainv1alpha1.Caminogo{}
+	// Fetch the Camino instance
+	instance := &chainv1alpha1.Camino{}
 	err := r.Get(ctx, req.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -108,7 +108,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 	// Genesis should be inside secrets or omitted for mainnet, fuji or local networks
 	//TODO: move to validation webhook
 	if len(instance.Spec.ExistingSecrets) > 0 && instance.Spec.Genesis != "" {
-		err = errors.NewBadRequest("Genesis cannot be specified when using pre-defined secrets. genesis.json key should be avaliable in secret instead and AVAGO_GENESIS env var provided.")
+		err = errors.NewBadRequest("Genesis cannot be specified when using pre-defined secrets. genesis.json key should be avaliable in secret instead and CAMINO_GENESIS env var provided.")
 		instance.Status.Error = err.Error()
 		if err := r.Status().Update(ctx, instance); err != nil {
 			l.Error(err, "error calling Update")
@@ -129,7 +129,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 	// Ignore these environment variables if given
 	for i, v := range instance.Spec.Env {
 		switch v.Name {
-		case "AVAGO_PUBLIC_IP", "AVAGO_HTTP_HOST", "AVAGO_STAKING_TLS_CERT_FILE", "AVAGO_STAKING_TLS_KEY_FILE", "AVAGO_DB_DIR", "AVAGO_HTTP_PORT", "AVAGO_STAKING_PORT", "AVAGO_GENESIS":
+		case "CAMINO_PUBLIC_IP", "CAMINO_HTTP_HOST", "CAMINO_STAKING_TLS_CERT_FILE", "CAMINO_STAKING_TLS_KEY_FILE", "CAMINO_DB_DIR", "CAMINO_HTTP_PORT", "CAMINO_STAKING_PORT", "CAMINO_GENESIS":
 			instance.Spec.Env[i] = instance.Spec.Env[len(instance.Spec.Env)-1]
 			instance.Spec.Env = instance.Spec.Env[:len(instance.Spec.Env)-1]
 		}
@@ -166,7 +166,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 		ctx,
 		req,
 		instance,
-		r.avagoConfigMap(instance, avaGoPrefix+instance.Spec.DeploymentName+"init-script", common.AvagoBootstraperFinderScript),
+		r.caminoConfigMap(instance, avaGoPrefix+instance.Spec.DeploymentName+"init-script", common.AvagoBootstraperFinderScript),
 		l,
 	); err != nil {
 		return ctrl.Result{}, err
@@ -179,7 +179,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 				ctx,
 				req,
 				instance,
-				r.avagoSecret(
+				r.caminoSecret(
 					instance,
 					getSecretBaseName(*instance, i),
 					network.KeyPairs[i].Cert,
@@ -214,7 +214,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 				ctx,
 				req,
 				instance,
-				r.avagoSecret(
+				r.caminoSecret(
 					instance,
 					getSecretBaseName(*instance, i),
 					tempCert,
@@ -231,7 +231,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 					ctx,
 					req,
 					instance,
-					r.avagoSecret(
+					r.caminoSecret(
 						instance,
 						getSecretBaseName(*instance, i),
 						"",
@@ -254,7 +254,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 		if err := r.ensureService(
 			ctx,
 			req,
-			r.avagoService(instance, serviceName),
+			r.caminoService(instance, serviceName),
 			l,
 		); err != nil {
 			return ctrl.Result{}, err
@@ -263,7 +263,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 		if err := r.ensurePVC(
 			ctx,
 			req,
-			r.avagoPVC(instance, instance.Spec.DeploymentName+"-"+strconv.Itoa(i)),
+			r.caminoPVC(instance, instance.Spec.DeploymentName+"-"+strconv.Itoa(i)),
 			l,
 		); err != nil {
 			return ctrl.Result{}, err
@@ -282,7 +282,7 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 			ctx,
 			req,
 			instance,
-			r.avagoStatefulSet(instance, instance.Spec.DeploymentName+"-"+strconv.Itoa(i), i),
+			r.caminoStatefulSet(instance, instance.Spec.DeploymentName+"-"+strconv.Itoa(i), i),
 			l,
 			async,
 		); err != nil {
@@ -307,9 +307,9 @@ func (r *CaminogoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *CaminogoReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *CaminoReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&chainv1alpha1.Caminogo{}).
+		For(&chainv1alpha1.Camino{}).
 		Complete(r)
 }
 
@@ -322,6 +322,6 @@ func notContainsS(s []string, str string) bool {
 	return true
 }
 
-func getSecretBaseName(instance chainv1alpha1.Caminogo, nodeId int) string {
+func getSecretBaseName(instance chainv1alpha1.Camino, nodeId int) string {
 	return instance.Spec.DeploymentName + "-" + strconv.Itoa(nodeId)
 }

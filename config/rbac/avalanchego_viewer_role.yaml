@@ -1,20 +1,20 @@
-# permissions for end users to view caminogoes.
+# permissions for end users to view caminonodes.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: caminogo-viewer-role
+  name: camino-viewer-role
 rules:
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes
+  - caminonodes
   verbs:
   - get
   - list
   - watch
 - apiGroups:
-  - chain.avax.network
+  - chain.camino.foundation
   resources:
-  - caminogoes/status
+  - caminonodes/status
   verbs:
   - get

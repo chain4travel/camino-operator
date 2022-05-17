@@ -33,7 +33,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	chainv1alpha1 "github.com/chain4travel/caminogo-operator/api/v1alpha1"
+	chainv1alpha1 "github.com/chain4travel/camino-operator/api/v1alpha1"
 	"github.com/go-logr/logr"
 )
 
@@ -50,10 +50,10 @@ var (
 	isTestRun              bool = false
 )
 
-func (r *CaminogoReconciler) ensureConfigMap(
+func (r *CaminoReconciler) ensureConfigMap(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Caminogo,
+	instance *chainv1alpha1.Camino,
 	s *corev1.ConfigMap,
 	l logr.Logger,
 ) error {
@@ -61,10 +61,10 @@ func (r *CaminogoReconciler) ensureConfigMap(
 	return err
 }
 
-func (r *CaminogoReconciler) ensureSecret(
+func (r *CaminoReconciler) ensureSecret(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Caminogo,
+	instance *chainv1alpha1.Camino,
 	s *corev1.Secret,
 	l logr.Logger,
 ) error {
@@ -78,7 +78,7 @@ func (r *CaminogoReconciler) ensureSecret(
 	return err
 }
 
-func (r *CaminogoReconciler) ensureService(
+func (r *CaminoReconciler) ensureService(
 	ctx context.Context,
 	req ctrl.Request,
 	s *corev1.Service,
@@ -89,7 +89,7 @@ func (r *CaminogoReconciler) ensureService(
 	return err
 }
 
-func (r *CaminogoReconciler) ensurePVC(
+func (r *CaminoReconciler) ensurePVC(
 	ctx context.Context,
 	req ctrl.Request,
 	s *corev1.PersistentVolumeClaim,
@@ -117,10 +117,10 @@ func (r *CaminogoReconciler) ensurePVC(
 	return err
 }
 
-func (r *CaminogoReconciler) ensureStatefulSet(
+func (r *CaminoReconciler) ensureStatefulSet(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Caminogo,
+	instance *chainv1alpha1.Camino,
 	s *appsv1.StatefulSet,
 	l logr.Logger,
 	async asyncCreateStatefulSet,
@@ -137,10 +137,10 @@ func (r *CaminogoReconciler) ensureStatefulSet(
 func waitForStatefulset(
 	ctx context.Context,
 	req ctrl.Request,
-	instance *chainv1alpha1.Caminogo,
+	instance *chainv1alpha1.Camino,
 	s *appsv1.StatefulSet,
 	l logr.Logger,
-	r *CaminogoReconciler,
+	r *CaminoReconciler,
 	async asyncCreateStatefulSet) error {
 
 	// creates the clientset
@@ -235,7 +235,7 @@ func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
 // isUpdateable must be true to allow update (some objects like PVC are immutable)
 func upsertObject(
 	ctx context.Context,
-	r *CaminogoReconciler,
+	r *CaminoReconciler,
 	targetObj client.Object,
 	isUpdateable bool,
 	l logr.Logger) (existed bool, err error) {

@@ -24,8 +24,8 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// CaminogoSpec defines the desired state of Caminogo
-type CaminogoSpec struct {
+// CaminoSpec defines the desired state of Camino
+type CaminoSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
@@ -57,7 +57,7 @@ type CaminogoSpec struct {
 
 	// Docker image name. Will be used in chain deployments
 	// +optional
-	// +kubebuilder:default:="caminoplatform/caminogo"
+	// +kubebuilder:default:="c4tplatform/camino-node"
 	Image string `json:"image,omitempty"`
 
 	// Docker image tag. Will be used in chain deployments
@@ -65,11 +65,11 @@ type CaminogoSpec struct {
 	// +kubebuilder:default:="latest"
 	Tag string `json:"tag,omitempty"`
 
-	// Environment variables for caminogo.
+	// Environment variables for camino-node.
 	// +optional
 	Env []corev1.EnvVar `json:"env,omitempty"`
 
-	// Resources (requests and limits of CPU and RAM) for the Caminogo instances
+	// Resources (requests and limits of CPU and RAM) for the Camino instances
 	// +optional
 	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
 
@@ -91,8 +91,8 @@ type Certificate struct {
 	Key  string `json:"key"`
 }
 
-// CaminogoStatus defines the observed state of Caminogo
-type CaminogoStatus struct {
+// CaminoStatus defines the observed state of Camino
+type CaminoStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
@@ -112,24 +112,24 @@ type CaminogoStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Caminogo is the Schema for the caminogoes API
-type Caminogo struct {
+// Camino is the Schema for the caminonodes API
+type Camino struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   CaminogoSpec   `json:"spec,omitempty"`
-	Status CaminogoStatus `json:"status,omitempty"`
+	Spec   CaminoSpec   `json:"spec,omitempty"`
+	Status CaminoStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// CaminogoList contains a list of Caminogo
-type CaminogoList struct {
+// CaminoList contains a list of Camino
+type CaminoList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Caminogo `json:"items"`
+	Items           []Camino `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Caminogo{}, &CaminogoList{})
+	SchemeBuilder.Register(&Camino{}, &CaminoList{})
 }
